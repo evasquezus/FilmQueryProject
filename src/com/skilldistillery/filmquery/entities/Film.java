@@ -20,6 +20,22 @@ public class Film {
 		return id;
 	}
 
+	public Film(int id, String title, String description, int release_year, String language_id, int rental_duration,
+			double rental_rate, int length, int replacement_cost, String rating, List<Actor> actor) {
+		super();
+		this.id = id;
+		this.title = title;
+		this.description = description;
+		this.release_year = release_year;
+		this.language_id = language_id;
+		this.rental_duration = rental_duration;
+		this.rental_rate = rental_rate;
+		this.length = length;
+		this.replacement_cost = replacement_cost;
+		this.rating = rating;
+		this.actor = actor;
+	}
+
 	@Override
 	public String toString() {
 		return "Film [id=" + id + ", title=" + title + ", description=" + description + ", release_year=" + release_year
