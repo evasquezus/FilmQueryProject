@@ -2,9 +2,15 @@ package com.skilldistillery.filmquery.entities;
 
 public class Actor {
 
-	int id;
-	String firstName;
-	String lastName;
+	private int id;
+	private String firstName;
+	private String lastName;
+
+	public Actor(int id, String firstName, String lastName) {
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
 
 	@Override
 	public String toString() {
@@ -31,13 +37,6 @@ public class Actor {
 		result = prime * result + id;
 		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
 		return result;
-	}
-
-	public Actor(int id, String firstName, String lastName) {
-		super();
-		this.id = id;
-		this.firstName = firstName;
-		this.lastName = lastName;
 	}
 
 	@Override

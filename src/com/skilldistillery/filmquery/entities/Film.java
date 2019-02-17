@@ -12,7 +12,7 @@ public class Film {
 	private int rental_duration;
 	private double rental_rate;
 	private int length;
-	private int replacement_cost;
+	private double replacement_cost;
 	private String rating;
 	private List<Actor> actor;
 
@@ -21,7 +21,7 @@ public class Film {
 	}
 
 	public Film(int id, String title, String description, int release_year, String language_id, int rental_duration,
-			double rental_rate, int length, int replacement_cost, String rating, List<Actor> actor) {
+			double rental_rate, int length, double replacement_cost, String rating, List<Actor> actor) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -34,6 +34,14 @@ public class Film {
 		this.replacement_cost = replacement_cost;
 		this.rating = rating;
 		this.actor = actor;
+	}
+
+	public Film(int id2, String title2, int release_year2, String rating2, String description2) {
+		// TODO Auto-generated constructor stub
+	}
+
+	public Film(int id2, String title2, int release_year2, String description2) {
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -104,7 +112,7 @@ public class Film {
 		this.length = length;
 	}
 
-	public int getReplacement_cost() {
+	public double getReplacement_cost() {
 		return replacement_cost;
 	}
 
@@ -112,6 +120,7 @@ public class Film {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((actor == null) ? 0 : actor.hashCode());
 		result = prime * result + ((description == null) ? 0 : description.hashCode());
 		result = prime * result + id;
 		result = prime * result + ((language_id == null) ? 0 : language_id.hashCode());
@@ -122,7 +131,8 @@ public class Film {
 		long temp;
 		temp = Double.doubleToLongBits(rental_rate);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result + replacement_cost;
+		temp = Double.doubleToLongBits(replacement_cost);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result + ((title == null) ? 0 : title.hashCode());
 		return result;
 	}
@@ -136,6 +146,11 @@ public class Film {
 		if (getClass() != obj.getClass())
 			return false;
 		Film other = (Film) obj;
+		if (actor == null) {
+			if (other.actor != null)
+				return false;
+		} else if (!actor.equals(other.actor))
+			return false;
 		if (description == null) {
 			if (other.description != null)
 				return false;
@@ -161,7 +176,7 @@ public class Film {
 			return false;
 		if (Double.doubleToLongBits(rental_rate) != Double.doubleToLongBits(other.rental_rate))
 			return false;
-		if (replacement_cost != other.replacement_cost)
+		if (Double.doubleToLongBits(replacement_cost) != Double.doubleToLongBits(other.replacement_cost))
 			return false;
 		if (title == null) {
 			if (other.title != null)

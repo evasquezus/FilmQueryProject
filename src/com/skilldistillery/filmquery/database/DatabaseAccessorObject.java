@@ -15,94 +15,117 @@ import com.skilldistillery.filmquery.entities.Film;
 public class DatabaseAccessorObject implements DatabaseAccessor {
 
 	private static final String URL = "jdbc:mysql://localhost:3306/sdvid?useSSL=false";
+	private static final String user = "student";
+	private static final String pass = "student";
+	static {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
 
-	public DatabaseAccessorObject() throws ClassNotFoundException {
-		Class.forName("com.mysql.jdbc.Driver");
-	}
-
-	public static void main(String[] args) throws SQLException, ClassNotFoundException {
-		DatabaseAccessorObject tester = new DatabaseAccessorObject();
-		Scanner input = new Scanner(System.in);
-		System.out.println("Which film ID would you like to look at ");
-		int userChoice = input.nextInt();
-		tester.findFilmById(userChoice);
-		input.close();
+		} catch (ClassNotFoundException e) {
+			System.err.println(e);
+		}
 
 	}
 
-	public Film findFilmById(int filmID) throws SQLException {
+//	public DatabaseAccessorObject() throws ClassNotFoundException {
+//		Class.forName("com.mysql.jdbc.Driver");
+//	}
+
+	public Film findFilmById(int filmID) {
 		Film film = null;
-		String user = "student";
-		String pass = "student";
-		Connection conn = DriverManager.getConnection(URL, user, pass);
-		String sql = "SELECT id, title, description FROM film WHERE id= ?";
-		PreparedStatement stmt = conn.prepareStatement(sql);
-		stmt.setInt(1, filmID);
-		ResultSet filmResult = stmt.executeQuery();
-		if (filmResult.next()) {
-			film = new Film(); // Create the object
-			// Here is our mapping of query columns to our object fields:
-			int id = filmResult.getInt("id");
-			String title = filmResult.getString("title");
-			String description = filmResult.getString("description");
+		try {
+			Connection conn = DriverManager.getConnection(URL, user, pass);
+			String sql = "SELECT id, title, description, rating, release_year, rental_rate, language_id,replacement_cost, length,rental_duration FROM film WHERE id = ?";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, filmID);
+			ResultSet filmResult = stmt.executeQuery();
+			while (filmResult.next()) {
+				int id = filmResult.getInt("id");
+				String title = filmResult.getString("title");
+				String description = filmResult.getString("description");
+				int release_year = filmResult.getInt("release_year");
+				String language_id = filmResult.getString("language_id");
+				int rental_duration = filmResult.getInt("rental_duration");
+				double rental_rate = filmResult.getDouble("rental_rate");
+				int length = filmResult.getInt("length");
+				String rating = filmResult.getString("rating");
+				double replacement_cost = filmResult.getDouble("replacement_cost");
+				List <Actor> actors = new ArrayList<>();
+				film = new Film(id, title, description, release_year, language_id, rental_duration, rental_rate, length, replacement_cost, rating, actors);
+				return film;
+				
+			}
 
 			filmResult.close();
 			stmt.close();
 			conn.close();
+		} catch (SQLException e) {
+			// TODO: handle exception
+			e.printStackTrace();
 		}
-
 		return film;
 	}
 
 	public Actor findActorById(int actorID) {
 		Actor actor = null;
 		try {
-			String user = "student";
-			String pass = "student";
 			Connection conn = DriverManager.getConnection(URL, user, pass);
-			String sql = "SELECT id,first_name,last_name FROM actor WHERE id = ?";
+			String sql = "SELECT id, first_name, last_name FROM actor WHERE id = ?,";
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, actorID);
 			ResultSet actorResult = stmt.executeQuery();
 			if (actorResult.next()) {
-				actor = new Actor(); // Create the object
-				// Here is our mapping of query columns to our object fields:
-				actor.setId(actorResult.getInt("id"));
+				String title = actorResult.getString("title");
+				String description = actorResult.getString("description");
+				int releaseYear = actorResult.getInt("release_year");
+				String languageID = actorResult.getString("language_id");
+				int rentalDuration = actorResult.getInt("rental_duration");
 
-			} else if (!actorResult.next()) {
-				System.out.println("No actor was found");
 			}
+
 			actorResult.close();
 			stmt.close();
 			conn.close();
 		} catch (SQLException e) {
+			// TODO: handle exception
 			e.printStackTrace();
 		}
 		return actor;
 	}
 
-	public List<Actor> findActorsByFilmId(int actorID) throws SQLException {
+	public List<Actor> findActorsByFilmId(int actorID) {
 		List<Actor> actors = new ArrayList<>();
+		Actor actor = null;
 		try {
-			Actor actor = null;
-			String user = "student";
-			String pass = "student";
 			Connection conn = DriverManager.getConnection(URL, user, pass);
-			String sql = "SELECT id FROM actor";
+			String sql = "SELECT act.id, act.first_name, act.last_name FROM actor actor JOIN film_actor filmact ON act.id = filmact.actor_id JOIN film ON filmact.film_id = film.id WHERE film.id = ?,";
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, actorID);
-			ResultSet rs = stmt.executeQuery();
+			ResultSet actorResult = stmt.executeQuery();
 
-			while (rs.next()) {
-				int filmId = rs.getInt("id");
-				Actor Actor1 = new Actor();
+			if (actorResult.next()) {
+				String firstName = actorResult.getString("actor.first_name");
+				String lastName = actorResult.getString("actor.last_name");
+				int id = actorResult.getInt("actor.id");
+				actor = new Actor(id, firstName, lastName);
+				actors.add(actor);
+
 			}
-			rs.close();
+
+			actorResult.close();
 			stmt.close();
 			conn.close();
 		} catch (SQLException e) {
+			// TODO: handle exception
 			e.printStackTrace();
 		}
 		return actors;
 	}
+
+	@Override
+	public Film findFilmByKW(String filmKW) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
