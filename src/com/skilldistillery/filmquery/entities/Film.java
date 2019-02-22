@@ -20,8 +20,9 @@ public class Film {
 		return id;
 	}
 
-	public Film(int id, String title, String description, int release_year, String language_id, int rental_duration,
-			double rental_rate, int length, double replacement_cost, String rating, List<Actor> actor) {
+	public Film(int id, String title, String description, String lastName, int release_year, String language_id,
+			int rental_duration, double rental_rate, int length, double replacement_cost, String rating,
+			List<Actor> actor) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -34,14 +35,6 @@ public class Film {
 		this.replacement_cost = replacement_cost;
 		this.rating = rating;
 		this.actor = actor;
-	}
-
-	public Film(int id2, String title2, int release_year2, String rating2, String description2) {
-		// TODO Auto-generated constructor stub
-	}
-
-	public Film(int id2, String title2, int release_year2, String description2) {
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
