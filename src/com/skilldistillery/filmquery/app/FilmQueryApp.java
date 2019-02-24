@@ -13,14 +13,13 @@ public class FilmQueryApp {
 
 	DatabaseAccessor db = new DatabaseAccessorObject();
 	Scanner input = new Scanner(System.in);
-	DatabaseAccessorObject accessorObj = new DatabaseAccessorObject();
+	DatabaseAccessorObject dbo = new DatabaseAccessorObject();
 
 	public static void main(String[] args) throws SQLException {
 		FilmQueryApp app = new FilmQueryApp();
 //		app.test();
 		app.launch();
 	}
-
 
 	private void launch() {
 		startUserInterface();
@@ -73,14 +72,14 @@ public class FilmQueryApp {
 
 	// layout for the output
 	private void findFilmById() {
-
 		try {
 			System.out.println("Please enter the ID of the film you wish to find");
 			int userChoice = input.nextInt();
 			Film film = db.findFilmById(userChoice);
 			System.out.println(" Title of this Film--> " + film.getTitle() + "\n" + " Release Date of this Film--> "
-					+ film.getRelease_year() + "\n" + " Rating this Film--> " + film.getRating() + "\n"
-					+ " Description of this Film -->" + film.getDescription());
+					+ film.getRelease_year() + "\n" + " Actors in this Film ---> " + dbo.findActorsByFilmId(film.getId())
+					+ " \nRating this Film--> " + film.getRating() + "\n" + " Description of this Film -->"
+					+ film.getDescription());
 		} catch (Exception e) {
 			System.err.println("Please try using an integer value as the film ID");
 		}
@@ -96,12 +95,16 @@ public class FilmQueryApp {
 			try {
 				for (Film film : filmKW) {
 					System.out.println(" Title of this Film--> " + film.getTitle() + " Release Date of this Film--> "
-							+ film.getDescription() + "Language of this Film-->" + film.getLanguage_id()
+							+ film.getDescription() + "Language of this Film--> " + film.getLanguage_id()
+							+ " Actors in this Film ---> " + dbo.findActorsByFilmId(film.getId())
 							+ "Rating of this film-->" + film.getRating() + " Release Date of this Film-->  "
 							+ film.getRelease_year());
 				}
-			} catch (NullPointerException e) {
-				System.err.println("No such film exist");
+
+			}
+
+			catch (NullPointerException e) {
+				System.err.println("\n No such film exist");
 			}
 		}
 	}
